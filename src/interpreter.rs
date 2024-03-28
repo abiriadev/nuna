@@ -27,6 +27,13 @@ where
 		}
 	}
 
+	fn resolve_prev(&self) -> i64 {
+		self.stack
+			.get(self.pointer.unwrap())
+			.unwrap_or(&Some(0))
+			.unwrap_or(0)
+	}
+
 	pub fn run(self) {
 		for token in self.token_stream {
 			match token {
