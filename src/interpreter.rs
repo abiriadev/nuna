@@ -1,6 +1,6 @@
 use std::io::Write;
 
-use crate::lexer::{Lexer, Token};
+use crate::lexer::{Integer, Lexer, Token};
 
 pub struct Interpreter<Ts, O>
 where
@@ -32,6 +32,10 @@ where
 			.get(self.pointer.unwrap())
 			.unwrap_or(&Some(0))
 			.unwrap_or(0)
+	}
+
+	fn resolve_integer(&self, integer: Integer) -> i64 {
+		integer.literal as i64 + integer.prevs as i64 * self.resolve_prev()
 	}
 
 	pub fn run(self) {
