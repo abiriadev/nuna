@@ -1,5 +1,7 @@
 use std::{iter::Peekable, str::Chars};
 
+use crate::error::NunaError;
+
 pub enum Token {
 	Push(Integer),
 	Pop,
@@ -63,7 +65,7 @@ impl<'s> Lexer<'s> {
 }
 
 impl<'s> Iterator for Lexer<'s> {
-	type Item = Result<Token, ()>;
+	type Item = Result<Token, NunaError>;
 
 	fn next(&mut self) -> Option<Self::Item> {
 		let Some(c) = self.source.next() else {
@@ -82,12 +84,12 @@ impl<'s> Iterator for Lexer<'s> {
 
 				match self.source.next() {
 					Some('읏') => Ok(Token::Pow(c)),
-					_ => Err(()),
+					_ => Err(NunaError::SyntaxError),
 				}
 			},
 			'💕' => Ok(Token::PopAdd),
 			'!' => Ok(Token::Print),
-			_ => Err(()),
+			_ => Err(NunaError::SyntaxError),
 		})
 	}
 }
