@@ -1,17 +1,20 @@
 use std::str::Chars;
 
 pub enum Token {
-	Push,
+	Push(Integer),
 	Pop,
-	Add,
-	Sub,
-	Mul,
-	Pow,
+	Add(Integer),
+	Sub(Integer),
+	Mul(Integer),
+	Pow(Integer),
 	PopAdd,
 	PopSub,
 	Print,
-	Prev,
-	Dot,
+}
+
+pub struct Integer {
+	pub literal: usize,
+	pub prevs: usize,
 }
 
 pub struct Lexer<'s> {
@@ -43,7 +46,7 @@ impl<'s> Iterator for Lexer<'s> {
 			'헤' => Ok(Token::Pop),
 			'으' => Ok(Token::Prev),
 			'응' => Ok(Token::PopSub),
-			'흐' => Ok(Token::Pow),
+			'흐' => unimplemented!(),
 			'읏' => unimplemented!(),
 			'💕' => Ok(Token::PopAdd),
 			'!' => Ok(Token::Print),
