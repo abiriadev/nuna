@@ -28,7 +28,7 @@ impl<'s> Lexer<'s> {
 		}
 	}
 
-	fn consume_integer(&mut self) -> Result<Integer, ()> {
+	fn consume_integer(&mut self) -> Integer {
 		let mut integer = Integer {
 			literal: 0,
 			prevs: 0,
@@ -48,7 +48,17 @@ impl<'s> Lexer<'s> {
 			}
 		}
 
-		Ok(integer)
+		if matches!(
+			integer,
+			Integer {
+				literal: 0,
+				prevs: 0
+			}
+		) {
+			integer.literal = 1;
+		}
+
+		integer
 	}
 }
 
