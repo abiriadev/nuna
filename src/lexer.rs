@@ -68,28 +68,31 @@ impl<'s> Iterator for Lexer<'s> {
 	type Item = Result<Token, NunaError>;
 
 	fn next(&mut self) -> Option<Self::Item> {
-		let Some(c) = self.source.next() else {
-			return None;
-		};
+		loop {
+			let Some(c) = self.source.next() else {
+				return None;
+			};
 
-		Some(match c {
-			'눈' | '누' => Ok(Token::Push(self.consume_integer())),
-			'난' | '나' => Ok(Token::Mul(self.consume_integer())),
-			'주' => Ok(Token::Sub(self.consume_integer())),
-			'거' => Ok(Token::Add(self.consume_integer())),
-			'헤' => Ok(Token::Pop),
-			'응' => Ok(Token::PopSub),
-			'흐' => {
-				let c = self.consume_integer();
+			return Some(match c {
+				'눈' | '누' => Ok(Token::Push(self.consume_integer())),
+				'난' | '나' => Ok(Token::Mul(self.consume_integer())),
+				'주' => Ok(Token::Sub(self.consume_integer())),
+				'거' => Ok(Token::Add(self.consume_integer())),
+				'헤' => Ok(Token::Pop),
+				'응' => Ok(Token::PopSub),
+				'흐' => {
+					let c = self.consume_integer();
 
-				match self.source.next() {
-					Some('읏') => Ok(Token::Pow(c)),
-					_ => Err(NunaError::SyntaxError),
-				}
-			},
-			'💕' => Ok(Token::PopAdd),
-			'!' => Ok(Token::Print),
-			_ => Err(NunaError::SyntaxError),
-		})
+					match self.source.next() {
+						Some('읏') => Ok(Token::Pow(c)),
+						_ => Err(NunaError::SyntaxError),
+					}
+				},
+				'💕' => Ok(Token::PopAdd),
+				'!' => Ok(Token::Print),
+				'.' | '으' => continue,
+				_ => Err(NunaError::SyntaxError),
+			});
+		}
 	}
 }
