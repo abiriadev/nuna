@@ -71,16 +71,20 @@ impl<'s> Iterator for Lexer<'s> {
 		};
 
 		Some(match c {
-			'눈' | '누' => Ok(Token::Push),
-			'난' | '나' => Ok(Token::Mul),
-			'주' => Ok(Token::Sub),
-			'거' => Ok(Token::Add),
-			'.' => Ok(Token::Dot),
+			'눈' | '누' => Ok(Token::Push(self.consume_integer())),
+			'난' | '나' => Ok(Token::Mul(self.consume_integer())),
+			'주' => Ok(Token::Sub(self.consume_integer())),
+			'거' => Ok(Token::Add(self.consume_integer())),
 			'헤' => Ok(Token::Pop),
-			'으' => Ok(Token::Prev),
 			'응' => Ok(Token::PopSub),
-			'흐' => unimplemented!(),
-			'읏' => unimplemented!(),
+			'흐' => {
+				let c = self.consume_integer();
+
+				match self.source.next() {
+					Some('읏') => Ok(Token::Pow(c)),
+					_ => Err(()),
+				}
+			},
 			'💕' => Ok(Token::PopAdd),
 			'!' => Ok(Token::Print),
 			_ => Err(()),
