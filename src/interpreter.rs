@@ -26,4 +26,20 @@ where
 			output,
 		}
 	}
+
+	pub fn run(self) {
+		for token in self.token_stream {
+			match token {
+				Token::Push(_) => todo!(),
+				Token::Pop => todo!(),
+				Token::Add(_) => todo!(),
+				Token::Sub(_) => todo!(),
+				Token::Mul(_) => todo!(),
+				Token::Pow(_) => todo!(),
+				Token::PopAdd => todo!(),
+				Token::PopSub => todo!(),
+				Token::Print => todo!(),
+			}
+		}
+	}
 }
